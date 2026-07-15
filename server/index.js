@@ -16,5 +16,5 @@ app.listen(PORT, () => {
 });
 
 app.get('/', (req, res) => {
-    res.send("Server running");
+    res.send('server is running...');
 });
