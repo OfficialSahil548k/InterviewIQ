@@ -19,7 +19,7 @@ const App = () => {
         `${ServerURL}/api/user/current-user`,
         { withCredentials: true }
       );
-
+      console.log(data);
       dispatch(setUserData(data));
     } catch (error) {
       dispatch(setUserData(null));

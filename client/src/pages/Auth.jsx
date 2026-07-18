@@ -27,9 +27,9 @@ const Auth = () => {
       );
 
       // Update Redux state
-      dispatch(setUserData(result.data));
+      dispatch(setUserData(result.data.user));
 
-     // navigate("/");
+      navigate("/");
 
     } catch (error) {
       console.log(error);
