@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
-const Auth = () => {
+const Auth = ({ isModel = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,26 +23,27 @@ const Auth = () => {
       const result = await axios.post(
         ServerURL + "/api/auth/google",
         { name, email },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       // Update Redux state
       dispatch(setUserData(result.data.user));
 
       navigate("/");
-
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#f3f3f3] flex items-center justify-center px-6 py-20">
+    <div
+      className={`w-full ${isModel ? "py-4" : "min-h-screen bg-[#f3f3f3] flex items-center justify-center px-6 py-20"}`}
+    >
       <motion.div
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.1 }}
-        className="w-full max-w-md p-8 rounded-3xl bg-white shadow-2xl border border-gray-200"
+        className={`w-full ${isModel ? "max-w-md p-8 rounded-3xl" : "max-w-lg p-12 rounded-4xl"} bg-white shadow-2xl border border-gray-200`}
       >
         <div className="flex items-center justify-center gap-3 mb-6">
           <div className="bg-black text-white p-2 rounded-lg">
