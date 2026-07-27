@@ -9,8 +9,12 @@ import {
   FaMicrophoneAlt,
   FaChartLine,
 } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData } from "../redux/userSlice.js";
 
 const Setup = ({ onStart }) => {
+  const userData = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [role, setRole] = useState("");
   const [experience, setExperience] = useState("");
   const [mode, setMode] = useState("Technical");
@@ -30,11 +34,8 @@ const Setup = ({ onStart }) => {
     try {
       const result = await axios.post(ServerURL + "/api/interview/resume",
         formData,
-        {withCredentials:true}
-      )
-
-      console.log(result.data);
-
+        {withCredentials:true});
+        
       setRole(result.data.role || "");
       setExperience(result.data.experience || "");
       setProjects(result.data.projects || []);
@@ -49,6 +50,23 @@ const Setup = ({ onStart }) => {
     }
   }
 
+  const handleStart = async () => {
+    setLoading(true);
+    try{
+      const result = await axios.post(ServerURL + "/api/interview/generate-questions",
+        {role, experience, mode, resumeText, projects, skills }, {withCredentials:true}
+      );
+
+      if(userData){
+        dispatch(setUserData({...userData, credits:result.data.creditsLeft}))
+      }
+      setLoading(false);
+      onStart(result.data);
+    }catch(error){
+      console.log(error);
+      setLoading(false);
+    }
+  }
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -230,13 +248,16 @@ const Setup = ({ onStart }) => {
             )}
 
             <motion.button 
-            disabled={!role || !experience}
+            onClick={handleStart}
+            disabled={!role || !experience || loading}
             whileHover={{scale: 1.03}}
             whileTap={{scale: 0.95}}
             className="w-full disabled:bg-gray-600 bg-green-600
             hover:bg-green-700 text-white py-3 rounded-full text-lg font-semibold 
             transition duration-300 shadow-md">
-              Start Interview
+              
+              {loading ? "Starting..." : "Start Interview"}
+              
             </motion.button>
           </div>
         </motion.div>
