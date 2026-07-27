@@ -2,13 +2,13 @@ import mongoose from 'mongoose';
 
 
 const questionsSchema = new mongoose.Schema({
-    questions: String,
+    question: String,
     difficulty: String,
     timeLimit: Number,
     answer: String,
     feedback: String,
     score: { type: Number, default: 0 },
-    confidnce: { type: Number, default: 0 },
+    confidence: { type: Number, default: 0 },
     communication: { type: Number, default: 0 },
     correctness: { type: Number, default: 0 },
 });
@@ -48,5 +48,5 @@ const interviewSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Interview = mongoose.model(interviewSchema);
+const Interview = mongoose.model("Interview",interviewSchema);
 export default Interview;
