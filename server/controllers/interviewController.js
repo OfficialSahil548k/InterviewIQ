@@ -239,7 +239,7 @@ export const submitAnswer = async (req, res) => {
 
         const messages = [
             {
-                role: "System",
+                role: "system",
                 content: `
                 You are a professional human interviewer evaluating a candidate's answer in a real interview.
 

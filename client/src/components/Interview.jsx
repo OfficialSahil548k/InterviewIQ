@@ -152,7 +152,6 @@ const Interview = ({ interviewData, onFinish }) => {
   useEffect(() =>{
     if(isIntroPhase) return;
     if(!currentQuestion) return;
-    if(isSubmitting) return;
 
     const timer = setInterval(() => {
       setTimeLeft((prev) =>{
@@ -165,7 +164,13 @@ const Interview = ({ interviewData, onFinish }) => {
     },1000);
 
     return ()=> clearInterval(timer);
-  },[isIntroPhase, currentIndex, isSubmitting]);
+  },[isIntroPhase, currentIndex]);
+
+  useEffect(()=>{
+    if(!isIntroPhase && currentQuestion){
+      setTimeLeft(currentQuestion.timeLimit || 60);
+    }
+  }, [currentIndex]);
 
 
   useEffect(()=>{
@@ -210,7 +215,7 @@ const Interview = ({ interviewData, onFinish }) => {
   };
 
 
-  const submitAnswer = async ()=>{
+  const handleSubmit = async ()=>{
     if(isSubmitting) return;
     stopMic()
     setIsSubmitting(true);
@@ -232,6 +237,56 @@ const Interview = ({ interviewData, onFinish }) => {
     }
 
   }
+
+  const handleNext = async () =>{
+    setAnswer("");
+    setFeedback("");
+
+    if(currentIndex + 1 >= questions.length){
+      finishInterview();
+      return;
+    }
+
+    await speakText("Alright, let's move to the next Question.");
+
+    setCurrentIndex(currentIndex + 1);
+    setTimeout(()=>{
+      if(isMicOn) startMic();
+    }, 500);
+  }
+
+  const finishInterview = async ()=>{
+    stopMic();
+    setIsMicOn(false);
+    try {
+      const result = await axios.post(ServerURL + "/api/interview/finish", {interviewId},{withCredentials:true});
+
+      console.log(result);
+      onFinish(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if(isIntroPhase) return;
+    if(!currentQuestion) return;
+
+    if(timeLeft === 0 && !isSubmitting && !feedback){
+      handleSubmit();
+    }
+  }, [timeLeft]);
+
+  useEffect(() => {
+    return () => {
+      if(recognitionRef.current){
+        recognitionRef.current.stop();
+        recognitionRef.current.abort();
+      }
+
+      window.speechSynthesis.cancel();
+    }
+  },[])
 
   return (
     <div
@@ -349,11 +404,11 @@ const Interview = ({ interviewData, onFinish }) => {
               whileTap={{ scale: 0.9 }}
               className="w-14 h-14 flex items-center justify-center rounded-full bg-black text-white shadow-lg"
             >
-              <FaMicrophone size={20} />
+              {isMicOn ? <FaMicrophone size={20} /> : <FaMicrophoneSlash size={20}/>}
             </motion.button>
 
             <motion.button
-              onClick={submitAnswer}
+              onClick={handleSubmit}
               disabled={isSubmitting}
               whileTap={{ scale: 0.95 }}
               className="flex-1 py-4 bg-linear-to-r from-emerald-600 to-teal-500
@@ -371,7 +426,9 @@ const Interview = ({ interviewData, onFinish }) => {
 
               <p className="text-emerald-700 font-medium mb-4">{feedback}</p>
 
-              <button className="w-full bg-gradient-to-r from-emerald-600 
+              <button
+              onClick={handleNext} 
+              className="w-full bg-gradient-to-r from-emerald-600 
               to-teal-500 text-white py-3 rounded-xl shadow-md 
               hover:opacity-90 transition flex items-center justify-center gap-1">
                 Next Question <BsArrowRight size={18}/>
