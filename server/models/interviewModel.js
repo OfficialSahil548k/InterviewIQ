@@ -36,15 +36,26 @@ const interviewSchema = new mongoose.Schema({
         type: String,
     },
     questions: [questionsSchema],
-
     finalScore: {
         type: Number,
         default: 0,
-        status : {
-            type: String,
-            enum : ["Incomplete", "Completed"],
-            default: "Incomplete"
-        },
+    },
+    status: {
+        type: String,
+        enum: ["incomplete", "completed"],
+        default: "incomplete",
+    },
+    avgConfidence: {
+        type: Number,
+        default: 0,
+    },
+    avgCommunication: {
+        type: Number,
+        default: 0,
+    },
+    avgCorrection: {
+        type: Number,
+        default: 0,
     }
 }, { timestamps: true });
 
