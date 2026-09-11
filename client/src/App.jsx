@@ -10,7 +10,8 @@ import InterviewHistory from './pages/InterviewHistory';
 import Pricing from './pages/Pricing';
 import InterviewReport from './pages/InterviewReport';
 
-export const ServerURL = "http://localhost:8000";
+// Use Vite env var `VITE_SERVER_URL` if provided, otherwise fallback to deployed URL
+export const ServerURL = "https://interviewiq-nc9o.onrender.com";
 
 const App = () => {
 
