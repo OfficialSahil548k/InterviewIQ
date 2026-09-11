@@ -11,13 +11,8 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = [
-    "http://localhost:5173",
-    "https://interview-i-q.netlify.app/"
-];
-
 app.use(cors({
-    origin: allowedOrigins,
+    origin: "https://interviewiq-nc9o.onrender.com",
     credentials: true
 }));
 
