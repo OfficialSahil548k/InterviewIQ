@@ -254,7 +254,7 @@ const Report = ({ report }) => {
                     </div>
 
                     <div className="bg-gray-200 h-2 sm:h-3 rounded-full">
-                      <div className="bg-green h-full rounded-full"
+                      <div className="bg-emerald-500 h-full rounded-full"
                       style={{width:`${s.value * 10}%`}}
                       ></div>
                     </div>

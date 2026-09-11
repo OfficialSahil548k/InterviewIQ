@@ -113,8 +113,7 @@ const Setup = ({ onStart }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.15 }}
                 whileHover={{ scale: 1.03 }}
-                className="flex items-center spaxe-x-4 
-              bg-white p-4 rounded-xl shadow-sm cursor-pinter"
+                className="flex items-center space-x-4 bg-white p-4 rounded-xl shadow-sm cursor-pointer"
               >
                 {item.icon}
                 <span className="text-gray-700 font-medium">{item.text}</span>
@@ -176,9 +175,7 @@ const Setup = ({ onStart }) => {
               <motion.div 
               whileHover={{scale: 1.02}}
               onClick={()=>document.getElementById("resumeUpload").click()}
-              className="border-2 border-dashed border-gray-300
-              rounded-xl p-8 text-center cursor-pinter
-              hover:border-green-500 hover:bg-green-50 transition">
+              className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-green-500 hover:bg-green-50 transition">
 
                 <FaFileUpload className="text-4xl mx-auto text-green-600 mb-3"/>
 

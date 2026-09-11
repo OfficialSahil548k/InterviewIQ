@@ -33,11 +33,10 @@ const Interview = ({ interviewData, onFinish }) => {
       const voices = window.speechSynthesis.getVoices();
       if (!voices.length) return;
 
-      const femaleVoice = voices.find(
-        (v) =>
-          v.name.toLowerCase().includes("zira") ||
-          v.name.toLowerCase().includes("samantha") ||
-          v.name.toLowerCase().includes("female"),
+      const femaleVoice = voices.find((v) =>
+        v.name.toLowerCase().includes("zira") ||
+        v.name.toLowerCase().includes("samantha") ||
+        v.name.toLowerCase().includes("female")
       );
 
       if (femaleVoice) {
@@ -46,11 +45,11 @@ const Interview = ({ interviewData, onFinish }) => {
         return;
       }
 
-      const maleVoice = voices.find((v) => {
+      const maleVoice = voices.find((v) =>
         v.name.toLowerCase().includes("david") ||
-          v.name.toLowerCase().includes("mark") ||
-          v.name.toLowerCase().includes("male");
-      });
+        v.name.toLowerCase().includes("mark") ||
+        v.name.toLowerCase().includes("male")
+      );
 
       if (maleVoice) {
         setSelectedVoice(maleVoice);
@@ -187,7 +186,7 @@ const Interview = ({ interviewData, onFinish }) => {
       setAnswer((prev) => prev + " " + transcript);
     };
 
-    recognition.current = recognition;
+    recognitionRef.current = recognition;
   },[]);
 
   const startMic = () =>{
@@ -295,7 +294,7 @@ const Interview = ({ interviewData, onFinish }) => {
     >
       <div
         className="w-full max-w-350 min-h-[80vh] bg-white rounded-3xl
-      shadow-2xl border borde-gray-200 flex flex-col lg:flex-row
+        shadow-2xl border border-gray-200 flex flex-col lg:flex-row
       overflow-hidden"
       >
         {/* video section */}
