@@ -10,19 +10,38 @@ import paymentRouter from "./routes/paymentRoutes.js";
 dotenv.config();
 
 const app = express();
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+].filter(Boolean);
 
 app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("CORS origin not allowed"));
+        }
+    },
+    credentials: true,
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ status: "ok", uptime: process.uptime() });
+});
+
+app.get("/", (req, res) => {
+    res.status(200).json({ message: "InterviewIQ API is running" });
+});
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
-app.use("/api/interview",interviewRouter);
-app.use("/api/payment",paymentRouter);
+app.use("/api/interview", interviewRouter);
+app.use("/api/payment", paymentRouter);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
